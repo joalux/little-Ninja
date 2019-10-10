@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - PickUp
+  - Left
+  - Right
+  - jumpRight
+  - jumpLeft
+  - enemyHead
+  - player feet
+  - enemyBody
+  - levelComplete
+  - platform
+  - jump
+  - water
+  - enemyHiding
+  - powerup
+  - shuriken
+  - throw
+  - spawnTrigger
+  - spawnStopper
+  - bossBody
+  - bossTrigger
+  - saw
+  - sawStopPoint
+  - Saw
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - ground
+  - sawLayer
+  - shuriLayer
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
