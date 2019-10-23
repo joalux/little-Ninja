@@ -69,9 +69,10 @@ GameObject:
   - component: {fileID: 4460180927921335019}
   - component: {fileID: 4460180927921334996}
   - component: {fileID: 4460180927921334997}
+  - component: {fileID: 1153145111982405851}
   - component: {fileID: 4460180927921334998}
   m_Layer: 0
-  m_Name: Enemy (4)
+  m_Name: enemyPrefab
   m_TagString: enemyBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -188,6 +189,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.102777764, y: 0.059880257}
   m_EdgeRadius: 0
+--- !u!114 &1153145111982405851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4460180927921334992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a62e3ad9302e4adc932c836d0bd1f92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  head: {fileID: 4460180927700100646}
+  blood: {fileID: 5339461770315546068, guid: e25802663c97d4bc79f0291e689bb664, type: 3}
+  speed: 8
+  jumpSpeed: 10
+  jumpForce: 10
+  isHiding: 0
+  rb: {fileID: 6073793658891954983, guid: 6a137febe9abb40b9862cda71da81358, type: 3}
 --- !u!95 &4460180927921334998
 Animator:
   serializedVersion: 3

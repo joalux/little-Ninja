@@ -16,6 +16,7 @@ public class enemyController : MonoBehaviour
     public GameObject blood;
 
     public playerController player;
+	public gameController GC;
 
     private void Start()
     {
@@ -63,7 +64,10 @@ public class enemyController : MonoBehaviour
         {
             print("KILLING PLAYER");
             Instantiate(blood, collision.gameObject.transform.position, Quaternion.identity);
-            collision.gameObject.SetActive(false);
+			//FindObjectOfType<gameController>()
+			GC.endGame();
+            
+            //collision.gameObject.SetActive(false);
 
         }
 

@@ -25,11 +25,11 @@ public class hideBehaviour : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         Vector2 current = animator.transform.position;
-        Vector2 player = playerPos.position;
+        //Vector2 player = playerPos.position;
 
-        float distance = Vector2.Distance(current, player);
+       // float distance = Vector2.Distance(current, player);
 
-        animator.SetFloat("playerDistance", distance);
+       // animator.SetFloat("playerDistance", distance);
 
        /* if (distance < distanceToChase)
         {

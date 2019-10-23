@@ -27,6 +27,16 @@ TagManager:
   - saw
   - sawStopPoint
   - Saw
+  - level2Complete
+  - spawnTrigger2
+  - GM
+  - bossShuri
+  - sword
+  - shuriAmmo
+  - wall
+  - floor
+  - start
+  - restart
   layers:
   - Default
   - TransparentFX
@@ -39,8 +49,8 @@ TagManager:
   - ground
   - sawLayer
   - shuriLayer
-  - 
-  - 
+  - bossLayer
+  - windowLayer
   - 
   - 
   - 

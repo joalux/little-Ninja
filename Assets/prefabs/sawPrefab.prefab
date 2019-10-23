@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3641463064006190376}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 101.75, y: -0.02, z: 6.61}
+  m_LocalPosition: {x: 102.271, y: 0.088, z: 1}
   m_LocalScale: {x: 0.2, y: 0.2, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -142,3 +142,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7de326ab3db06f4ba568b7ec4874e0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blood: {fileID: 5339461770315546068, guid: e25802663c97d4bc79f0291e689bb664, type: 3}
+  player: {fileID: 8448968858034696604, guid: 509c47ed489184bcf94f9d9a8d7da894, type: 3}

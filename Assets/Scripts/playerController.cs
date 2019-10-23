@@ -13,22 +13,24 @@ public class playerController : MonoBehaviour
     private float moveInput;
     private float jumpSpeed;
     
-    public SpriteRenderer sr;
+    //public SpriteRenderer sr;
 
     public bool faceingRight = true;
     public bool notMoving = true;
-    public bool isGrounded, isJumping;
+    public bool isGrounded, isJumping, isOnWindow;
     public bool canThrow = false;
     public bool isAlive = true;
+    public bool hasWon = false;
 
     public Transform groundCheck;
    
-    public LayerMask whatIsGround;
+    public LayerMask whatIsGround, whatIsWindow;
 
     public enemyChaseController[] enemies;
     public enemyController enemy;
     public enemyBossController boss;
     public gameController GC;
+    public finalBossController finalBoss;
 
     public Rigidbody2D rb;
 
@@ -36,6 +38,9 @@ public class playerController : MonoBehaviour
     public int extraJumpValue;
     public int points = 0;
     public int poolSize = 10;
+    public int shuriAmmo = 0;
+
+    public int lives = 10;
 
     private float ScreenWidht;
 
@@ -43,7 +48,7 @@ public class playerController : MonoBehaviour
     public GameObject shurikenPrefab;
     public GameObject bossTrigger;
 
-    public enemySpawner enemSpawner;
+    public enemySpawner enemSpawner, enemSpawner2;
 
     public List<Rigidbody2D> shurikenPool = new List<Rigidbody2D>();
 
@@ -52,19 +57,31 @@ public class playerController : MonoBehaviour
 
     private int throwIndex = 0;
 
+    public float shootingRate = 10f;
+    private float shootCooldown;
+
     private void Start()
     {
         faceingRight = true;
         extraJumps = extraJumpValue;
         rb = GetComponent<Rigidbody2D>();
-       InitObjectPool();
+        //InitObjectPool();
         ScreenWidht = Screen.width;
-      
+        isOnWindow = false;
+        shootCooldown = shootingRate;
 
     }
-    
 
-    void InitObjectPool()
+    public void respawn()
+    {
+        
+            print("RESPAWNING!!!!!!!!!!!!");
+            print(GC.activeCheckpoint);
+            transform.position = GC.checkpoints[GC.activeCheckpoint].transform.position;
+      
+            
+    }
+    /*void InitObjectPool()
     {
 
         for (int i = 0; i < poolSize; i++)
@@ -75,20 +92,20 @@ public class playerController : MonoBehaviour
             Rigidbody2D shuriRB = shuriken.GetComponent<Rigidbody2D>();
             shurikenPool.Add(shuriRB);
         }
-
-
-    }
+    }*/
     public void throwShuriken()
     {
-        if(canThrow == true && isAlive == true)
+      
+        if(canThrow == true && isAlive == true && shuriAmmo > 0)
         {
-            
+           
             GameObject shuriken = Instantiate(shurikenPrefab);
             shuriken.transform.position = firePoint.transform.position;
             Rigidbody2D shuriRB = shuriken.GetComponent<Rigidbody2D>();
             throwForce = 1000f;
             if (faceingRight == true)
             {
+
                 shuriRB.AddForce(Vector2.right * throwForce);
             }
             else
@@ -96,8 +113,10 @@ public class playerController : MonoBehaviour
                 shuriRB.AddForce(Vector2.left * throwForce);
 
             }
+            shuriAmmo--;
         }
-           
+      
+
     }
 
     public void move(bool right)
@@ -165,18 +184,16 @@ public class playerController : MonoBehaviour
     {
 
         notMoving = true;
-
-       
-                rb.velocity = new Vector2(0, 0);
-                notMoving = true;
-            
-
+        rb.velocity = new Vector2(0, 0);
+        notMoving = true;
+  
        
     }
 
     public void checkGround()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+        isOnWindow = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsWindow);
 
     }
 
@@ -188,35 +205,71 @@ public class playerController : MonoBehaviour
             extraJumps = extraJumpValue;
 
         }
+        if(isOnWindow == true)
+        {
+            extraJumps = 1;
+        }
     }
 
     void FixedUpdate()
     {
       
     }
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("bossShuri"))
+        {
+            Instantiate(blood, transform.position, Quaternion.identity);
+            print("HEALTH");
+            GC.endGame();
+
+        }
+    }
 
 
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("saw"))
+        if (other.gameObject.CompareTag("shuriAmmo"))
         {
+            print("MORE SHURIS");
+
+            shuriAmmo = shuriAmmo + 10;
+
+           other.gameObject.SetActive(false);
+
+        }
+
+        if (other.gameObject.CompareTag("sword"))
+        {
+            Instantiate(blood, transform.position, Quaternion.identity);
+            print("HEALTH");
+            GC.endGame();
+
+
+        }
+
+        if (other.gameObject.CompareTag("bossShuri"))
+        {
+            Instantiate(blood, transform.position, Quaternion.identity);
+            print("HEALTH");
+            GC.endGame();
+
             gameObject.SetActive(false);
 
         }
-            
-
         if (other.gameObject.CompareTag("enemyHead"))
         {
             other.gameObject.SetActive(false);
             Instantiate(blood, other.gameObject.transform.position, Quaternion.identity);
-
+            points = points + 10;
             other.transform.parent.gameObject.SetActive(false);
         }
         if (other.gameObject.CompareTag("PickUp"))
         {
             Debug.Log("collecting!!!!!!!!!!");
             other.gameObject.SetActive(false);
+
 
             points = points + 10;
         }
@@ -226,17 +279,27 @@ public class playerController : MonoBehaviour
             SceneManager.LoadScene("Level2");
 
         }
+        if (other.gameObject.CompareTag("level2Complete"))
+        {
+            Debug.Log("LEVEL COMPLETE");
+            SceneManager.LoadScene("Level3");
+
+        }
         if (other.gameObject.CompareTag("water"))
         {
-            Debug.Log("----------DROWNED-----------");
+            respawn();
 
-            gameObject.SetActive(false);
+            //FindObjectOfType<gameController>().endGame();
+
+            //gameObject.SetActive(false);
         }
         if (other.gameObject.CompareTag("powerup"))
         {
             Debug.Log("----------Power up!-----------");
             canThrow = true;
+            shuriAmmo = 100;
             other.gameObject.SetActive(false);
+
 
         }
         if (other.gameObject.CompareTag("spawnTrigger"))
@@ -246,24 +309,25 @@ public class playerController : MonoBehaviour
                 enemSpawner.startSpawning();
             }
         }
+        if (other.gameObject.CompareTag("spawnTrigger2"))
+        {
+            Debug.Log("SPAWNING");
+            enemSpawner2.startSpawning();
+            other.gameObject.SetActive(false);
+
+            
+        }
         if (other.gameObject.CompareTag("spawnStopper"))
         {
-            if (enemSpawner.isSpawning == true)
-            {
-                enemSpawner.stopSpawning();
-            }
-        }
 
-        if (other.gameObject.CompareTag("bossTrigger"))
-        {
-            Debug.Log("BOSS BATTLE STARTING!!!");
-            boss.healthBar.gameObject.SetActive(true);
-            boss.bossIcon.gameObject.SetActive(true);
-            bossTrigger.SetActive(false);
+            Debug.Log("STOPPING SPAWNING");
+
+            enemSpawner.stopSpawning();
+                enemSpawner2.stopSpawning();
             
-            boss.startBossFight();
         }
-       
+   
+
     }
    
 }

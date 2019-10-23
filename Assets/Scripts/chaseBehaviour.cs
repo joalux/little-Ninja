@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class chaseBehaviour : StateMachineBehaviour
 {
-    private Transform playerPos, enemyPos;
+    private Transform playerPos;
     public float speed = 10;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

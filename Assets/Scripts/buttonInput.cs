@@ -1,13 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class buttonInput : MonoBehaviour
 {
+    private static buttonInput instance;
+
     public delegate void ButtonPressed();
-    public static event ButtonPressed moveRight, moveLeft, jump, stopMoving;
+    //public static event ButtonPressed moveRight, moveLeft, jump, stopMoving;
    
     public playerController player;
+
+    public float fireRate = 0.5F;
+    private float nextFire = 0.0F;
+
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(instance);
+         
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
 
     private void Start()
     {
@@ -27,32 +50,38 @@ public class buttonInput : MonoBehaviour
 
                 RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
 
-                if (moveLeft != null && hit.collider != null && hit.collider.tag == "Left")
+                if (hit.collider != null && hit.collider.tag == "Left")
                 {
                     player.isJumping = false;
-                    moveLeft();
+                    player.move(false);
+                    //moveLeft();
 
 
                 }
-                else if (moveRight != null && hit.collider != null && hit.collider.tag == "Right")
+                else if (hit.collider != null && hit.collider.tag == "Right")
                 {
                     player.isJumping = false;
-                    moveRight();
+                    player.move(true);
+                    //moveRight();
                     
                 }
                
 
                 else if (hit.collider != null && hit.collider.tag == "jump")
                 {
-                    jump();
+                    player.jump();
                     player.isJumping = true;
                 }
 
-                else if (hit.collider != null && hit.collider.tag == "throw")
+                else if (hit.collider != null && hit.collider.tag == "throw" && Time.time > nextFire)
                 {
-                    if(player.canThrow == true)
+                    nextFire = Time.time + fireRate;
+
+                    if (player.canThrow == true)
                     {
                         player.throwShuriken();
+                        
+
                     }
                        
                 }
@@ -65,24 +94,27 @@ public class buttonInput : MonoBehaviour
                 Vector3 pos = Camera.main.ScreenToWorldPoint(touch.position);
 
                 RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
-                if (moveRight != null && hit.collider != null && hit.collider.tag == "Right")
+                if (hit.collider != null && hit.collider.tag == "Right")
                 {
 
                     player.isJumping = false;
-                    stopMoving();
+                    player.stop();
                 }
 
-                else if (moveLeft != null && hit.collider != null && hit.collider.tag == "Left")
+                else if (hit.collider != null && hit.collider.tag == "Left")
                 {
 
                     player.isJumping = false;
-                    stopMoving();
+                    player.stop();
                 }
                
 
 
 
             }
+
+           
+
 
 
 

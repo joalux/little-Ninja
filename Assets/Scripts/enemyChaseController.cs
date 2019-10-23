@@ -5,9 +5,9 @@ using UnityEngine;
 public class enemyChaseController : MonoBehaviour
 {
 
-    public GameObject player, head, blood;
+    public GameObject head, blood;
 
-    public playerController playerCont;
+    private Transform playerTransform;
 
     public float speed, jumpSpeed, jumpForce;
 
@@ -19,6 +19,7 @@ public class enemyChaseController : MonoBehaviour
     void Start()
     {
         head.transform.position = transform.position;
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
     }
 
@@ -27,7 +28,7 @@ public class enemyChaseController : MonoBehaviour
     {
         if(isHiding == false)
         {
-            transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+           transform.position = Vector3.MoveTowards(transform.position, playerTransform.position, speed * Time.deltaTime);
 
         }
 
@@ -50,14 +51,17 @@ public class enemyChaseController : MonoBehaviour
         {
             print("KILLING PLAYER");
             Instantiate(blood, collision.gameObject.transform.position, Quaternion.identity);
-            playerCont.isAlive = false;
-            collision.gameObject.SetActive(false);
+       
+            FindObjectOfType<gameController>().endGame();
+
+           // collision.gameObject.SetActive(false);
 
         }
         if (collision.gameObject.CompareTag("shuriken"))
         {
             gameObject.SetActive(false);
             Instantiate(blood, transform.position, Quaternion.identity);
+
         }
     }
 }
